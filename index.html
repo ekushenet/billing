@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ekushe.Net -Management Dashboard</title>
+  <!-- Google Font & FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg-color: #f8fafc;
+      --sidebar-bg: #1e293b;
+      --sidebar-hover: #334155;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --sidebar-width: 260px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------------- LOGIN SCREEN ---------------- */
+    #login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 20px;
+    }
+
+    .login-card {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-card .logo-placeholder {
+      width: 70px;
+      height: 70px;
+      background: #eff6ff;
+      color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin: 0 auto 20px;
+    }
+
+    .login-card h2 {
+      margin-bottom: 8px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .login-card p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .pin-input-group {
+      margin-bottom: 20px;
+    }
+
+    .pin-input-group input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 20px;
+      letter-spacing: 6px;
+      text-align: center;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .pin-input-group input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .login-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ---------------- DASHBOARD APP ---------------- */
+    #dashboard-app {
+      display: none;
+      flex: 1;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--sidebar-bg);
+      color: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .sidebar-header i {
+      font-size: 24px;
+      color: var(--primary-color);
+    }
+
+    .sidebar-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 24px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background-color: var(--sidebar-hover);
+      color: #ffffff;
+    }
+
+    .nav-item.active {
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #334155;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover {
+      background-color: #ef4444;
+      border-color: #ef4444;
+    }
+
+    /* Main Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Top Bar */
+    .topbar {
+      height: 60px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: #ffffff;
+    }
+
+    .toggle-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* Frame / Page Wrapper */
+    .iframe-container {
+      flex: 1;
+      width: 100%;
+      height: calc(100vh - 60px);
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Welcome Dashboard View */
+    .welcome-screen {
+      padding: 40px;
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    .welcome-header {
+      margin-bottom: 30px;
+    }
+
+    .welcome-header h1 {
+      font-size: 28px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .welcome-header p {
+      color: var(--text-muted);
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg-color);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .stat-info h4 {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-info p {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+
+    /* Overlay for Mobile Sidebar */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    /* ---------------- RESPONSIVE MEDIA QUERIES ---------------- */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay.active {
+        display: block;
+      }
+
+      .toggle-menu-btn {
+        display: block;
+      }
+
+      .welcome-screen {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. LOGIN SCREEN -->
+  <div id="login-container">
+    <div class="login-card">
+      <div class="logo-placeholder">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2>System Access</h2>
+      <p>Enter your 5-digit PIN</p>
+      
+      <div class="pin-input-group">
+        <input type="password" id="pin-input" maxlength="5" placeholder="•••••" autofocus>
+      </div>
+      <button type="button" class="login-btn" onclick="handleLogin()">Log In</button>
+      <div id="error-msg" class="error-msg">Incorrect PIN </div>
+    </div>
+  </div>
+
+  <!-- 2. DASHBOARD APP -->
+  <div id="dashboard-app" style="display: none;">
+    <!-- Overlay for mobile drawer -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <i class="fa-solid fa-chart-line"></i>
+        <h3>Portal App</h3>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a class="nav-item active" onclick="loadContent('home', this)">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </a>
+        <a class="nav-item" onclick="loadContent('dashboard', this)">
+          <i class="fa-solid fa-table-columns"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item" onclick="loadContent('user-collection', this)">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>User Collection</span>
+        </a>
+        <a class="nav-item" onclick="loadContent('due-collection', this)">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+          <span>Due Collection</span>
+        </a>
+        <a class="nav-item" onclick="loadContent('cost-entry', this)">
+          <i class="fa-solid fa-receipt"></i>
+          <span>Cost Entry</span>
+        </a>
+        <a class="nav-item" onclick="loadContent('payment', this)">
+          <i class="fa-solid fa-credit-card"></i>
+          <span>Payment</span>
+        </a>
+        <a class="nav-item" onclick="loadContent('salary-entry', this)">
+          <i class="fa-solid fa-money-bill-wave"></i>
+          <span>Salary Entry</span>
+        </a>
+        <a class="nav-item" onclick="loadContent('reports', this)">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Reports & Analytics</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="main-content">
+      <header class="topbar">
+        <button class="toggle-menu-btn" onclick="toggleSidebar()">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="topbar-title" id="page-title">Welcome</div>
+        <div></div> <!-- Spacer -->
+      </header>
+
+      <!-- Frame Viewer / Dynamic Content -->
+      <div class="iframe-container" id="iframe-container">
+        <!-- Default Content: Home Screen -->
+        <div id="home-view" class="welcome-screen">
+          <div class="welcome-header">
+            <h1>Welcome Back to -Ekushe Network 👋</h1>
+            <p>Select an option from the sidebar menu to view spreadsheets or submit entries.</p>
+          </div>
+
+          <div class="quick-stats">
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-table"></i></div>
+              <div class="stat-info">
+                <h4>Dashboard Sheet</h4>
+                <p>Live Data</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+              <div class="stat-info">
+                <h4>Data Entries</h4>
+                <p>5 Active Forms</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Iframe Wrapper -->
+        <iframe id="content-frame" style="display: none;" src="" title="Content Frame"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const VALID_PIN = "12345";
+    const links = {
+      'dashboard': 'https://docs.google.com/spreadsheets/d/1BA38lZwkYMh0U471P_8-sgvC6JY_J3MRGybj_-VAaKE/edit?usp=sharing',
+      'user-collection': 'https://docs.google.com/forms/d/e/1FAIpQLSdU4W9nuoDSX9zpUFhACqnmG6gXHA5xsdkbcf2QODXDqq169w/viewform',
+      'due-collection': 'https://docs.google.com/forms/d/e/1FAIpQLSe8BUus7849un4Cr1bGlcRkaJikb_m2E8_T84QKgV4NxPtiFA/viewform',
+      'cost-entry': 'https://docs.google.com/forms/d/e/1FAIpQLSfbIxmP5RhDR8ztEttv1RDGMFQtw5Nj2S1CKO7lOyjzKxpR8g/viewform',
+      'payment': 'https://docs.google.com/forms/d/e/1FAIpQLScPH8-ZWeNb2ZSDL45yFCK17sbqjJo_S4XfMMc_h-OEDGovww/viewform',
+      'salary-entry': 'https://docs.google.com/forms/d/e/1FAIpQLSetqVmKcX_FbAHRkKAn8K3Mtcehj25Edo4ZA9M--jjlLz6a4Q/viewform'
+    };
+
+    function handleLogin() {
+      const pinInput = document.getElementById('pin-input').value.trim();
+      const errorMsg = document.getElementById('error-msg');
+
+      if (pinInput === VALID_PIN) {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        showDashboard();
+      } else {
+        errorMsg.style.display = 'block';
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+      }
+    }
+
+    // Allow pressing "Enter" key on keyboard to login
+    document.getElementById('pin-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
+    });
+
+    function logout() {
+      sessionStorage.removeItem('isLoggedIn');
+      document.getElementById('dashboard-app').style.display = 'none';
+      document.getElementById('login-container').style.display = 'flex';
+      document.getElementById('pin-input').value = '';
+      document.getElementById('error-msg').style.display = 'none';
+      document.getElementById('pin-input').focus();
+    }
+
+    function checkAuth() {
+      if (sessionStorage.getItem('isLoggedIn') === 'true') {
+        showDashboard();
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('login-container').style.display = 'none';
+      document.getElementById('dashboard-app').style.display = 'flex';
+    }
+
+    function loadContent(key, element) {
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => item.classList.remove('active'));
+      if (element) element.classList.add('active');
+
+      const homeView = document.getElementById('home-view');
+      const iframe = document.getElementById('content-frame');
+      const pageTitle = document.getElementById('page-title');
+
+      if (key === 'home') {
+        homeView.style.display = 'block';
+        iframe.style.display = 'none';
+        iframe.src = '';
+        pageTitle.textContent = 'Welcome';
+      } else if (key === 'reports') {
+        homeView.style.display = 'none';
+        iframe.style.display = 'none';
+        pageTitle.textContent = 'Reports & Analytics';
+        alert('This page is currently empty / open for future upgrades.');
+      } else if (links[key]) {
+        homeView.style.display = 'none';
+        iframe.style.display = 'block';
+        iframe.src = links[key];
+        pageTitle.textContent = element.querySelector('span').textContent;
+      }
+
+      if (window.innerWidth <= 768) {
+        toggleSidebar();
+      }
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    // Run auth check on initial page load
+    checkAuth();
+  </script>
+</body>
+</html>
