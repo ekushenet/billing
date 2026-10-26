@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ekushe.Net -Management Dashboard</title>
+  <title>Ekushe.Net - Management Dashboard</title>
   <!-- Google Font & FontAwesome Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -408,6 +408,10 @@
           <i class="fa-solid fa-table-columns"></i>
           <span>Dashboard</span>
         </a>
+        <a class="nav-item" onclick="loadContent('due-list', this)">
+          <i class="fa-solid fa-list-check"></i>
+          <span>DUE List</span>
+        </a>
         <a class="nav-item" onclick="loadContent('user-collection', this)">
           <i class="fa-solid fa-user-plus"></i>
           <span>User Collection</span>
@@ -489,6 +493,7 @@
     const VALID_PIN = "12345";
     const links = {
       'dashboard': 'https://docs.google.com/spreadsheets/d/1BA38lZwkYMh0U471P_8-sgvC6JY_J3MRGybj_-VAaKE/edit?usp=sharing',
+      'due-list': 'https://docs.google.com/spreadsheets/d/1BA38lZwkYMh0U471P_8-sgvC6JY_J3MRGybj_-VAaKE/edit?gid=996310129#gid=996310129',
       'user-collection': 'https://docs.google.com/forms/d/e/1FAIpQLSdU4W9nuoDSX9zpUFhACqnmG6gXHA5xsdkbcf2QODXDqq169w/viewform',
       'due-collection': 'https://docs.google.com/forms/d/e/1FAIpQLSe8BUus7849un4Cr1bGlcRkaJikb_m2E8_T84QKgV4NxPtiFA/viewform',
       'cost-entry': 'https://docs.google.com/forms/d/e/1FAIpQLSfbIxmP5RhDR8ztEttv1RDGMFQtw5Nj2S1CKO7lOyjzKxpR8g/viewform',
